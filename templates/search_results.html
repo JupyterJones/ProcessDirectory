@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+</head>
+<body>
+    <h1>Search Results for "{{ keyword }}"</h1>
+    
+    {% if code_blocks %}
+        <ul>
+            {% for block in code_blocks %}
+                <li>
+                    <strong>Timestamp:</strong> {{ block.datetime }}<br>
+                    <strong>Code Block:</strong><br>
+                    <pre>{{ block.code_block }}</pre>
+                    <strong>Extracted Lines:</strong><br>
+                    <pre>
+                    {% for line in block.extracted_lines %}
+                        {{ line }}
+                    {% endfor %}
+                    </pre>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No matching code blocks found.</p>
+    {% endif %}
+    
+    <a href="{{ url_for('search_code') }}">Back to Search</a>
+</body>
+</html>

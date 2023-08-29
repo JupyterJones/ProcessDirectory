@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image to Video</title>
+</head>
+<body>
+    <h1>Convert Images to Video</h1>
+    <form method="post" action="/process" enctype="multipart/form-data">
+        <label for="image_directory">Select an image directory:</label><br>
+        <input type="file" id="image_directory" name="image_directory" webkitdirectory><br><br>
+        <label for="fps">FPS (Frames per second):</label><br>
+        <input type="number" id="fps" name="fps" min="1" max="30" value="24"><br><br>
+        <input type="submit" value="Convert">
+    </form>
+</body>
+</html>

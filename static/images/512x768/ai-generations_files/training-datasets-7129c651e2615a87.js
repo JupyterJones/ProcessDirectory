@@ -1,0 +1,1 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[169],{15892:function(n,t,u){(window.__NEXT_P=window.__NEXT_P||[]).push(["/training-datasets",function(){return u(84256)}])},84256:function(n,t,u){"use strict";u.r(t);var _=u(85893),i=u(98411);t.default=()=>(0,_.jsx)(i.Z,{})}},function(n){n.O(0,[411,774,888,179],function(){return n(n.s=15892)}),_N_E=n.O()}]);

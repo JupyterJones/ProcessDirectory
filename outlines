@@ -1,0 +1,57 @@
+import cv2
+import os
+
+# Set up logging
+import logging
+logging.basicConfig(filename='video_outline_creation_log.txt', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
+def create_blue_outlines_from_video(video_path, output_dir):
+    """
+    Create transparent blue outlines from frames of a video and save them in the output directory.
+    """
+    # Create the output directory if it doesn't exist
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # Open the video file
+    cap = cv2.VideoCapture(video_path)
+
+    frame_number = 0
+    while cap.isOpened():
+        ret, frame = cap.read()
+
+        if not ret:
+            break
+
+        # Convert the frame to grayscale
+        gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
+        # Apply Canny edge detection
+        edges = cv2.Canny(gray_frame, 100, 200)
+
+        # Create a transparent blue outline
+        outline_with_alpha = cv2.cvtColor(edges, cv2.COLOR_GRAY2BGRA)
+        outline_with_alpha[:, :, 0] = 0  # Set blue channel to 0
+        outline_with_alpha[:, :, 1] = 0  # Set green channel to 0
+        outline_with_alpha[:, :, 2] = 255  # Set red channel to 255 (blue in BGR)
+        outline_with_alpha[:, :, 3] = edges  # Set alpha channel using the edges
+
+        # Save the transparent blue outline frame
+        outline_filename = f"frame_{frame_number:04d}_outline.png"
+        outline_path = os.path.join(output_dir, outline_filename)
+        cv2.imwrite(outline_path, outline_with_alpha)
+
+        logging.info(f"Saved transparent blue outline frame: {outline_filename}")
+
+        frame_number += 1
+
+    cap.release()
+
+    logging.info("Outline creation from video frames complete.")
+
+# Call the create_blue_outlines_from_video function with your video file and output directory
+if __name__ == "__main__":
+    video_path = '/home/jack/Desktop/ProcessDirectory/static/video/20230820113937.mp4'
+    output_directory = 'static/images/frames_with_blue_outlines'
+    create_blue_outlines_from_video(video_path, output_directory)
+

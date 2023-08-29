@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Directory</title>
+</head>
+<body>
+    <h1>Upload Directory</h1>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" multiple webkitdirectory directory>
+        <input type="text" name="target_directory" placeholder="Target Directory">
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>

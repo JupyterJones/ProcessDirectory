@@ -1,0 +1,233 @@
+
+
+
+
+
+----------------------------
+
+return render_template('final.html', video_file=f"/square_videos/{now}_outputALL.mp4")
+
+
+
+
+
+
+
+
+
+@app.errorhandler(Exception)
+def handle_error(e):
+    # Handle specific exception
+    if isinstance(e, Exception):
+        return render_template('error.html', error_message=str(e)), 500
+    else:
+        # Handle other exceptions
+        app.logger.exception('An error occurred:')
+        return render_template('error.html'), 500
+
+
+
+
+
+
+
+
+
+from flask import Flask, render_template, request, send_file
+import os
+import glob
+from moviepy.editor import ImageSequenceClip
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'uploads'
+
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        # Process the uploaded files
+        input_files = request.files.getlist('input_files')
+        output_video = 'output_video.mp4'
+
+        # Create a temporary directory to save the uploaded files
+        temp_directory = os.path.join(app.config['UPLOAD_FOLDER'], 'temp')
+        os.makedirs(temp_directory, exist_ok=True)
+
+        # Save the uploaded files to the temporary directory
+        for file in input_files:
+            file.save(os.path.join(temp_directory, file.filename))
+
+        # Get a list of image files in the temporary directory
+        image_files = glob.glob(os.path.join(temp_directory, '*.jpg'))
+
+        # Create ImageSequenceClip object from selected images
+        clip = ImageSequenceClip(image_files, fps=24)
+
+        # Write video file using Moviepy
+        clip.write_videofile(output_video, codec='libx264', fps=24)
+
+        # Delete the temporary directory
+        shutil.rmtree(temp_directory)
+
+        # Return the generated video file
+        return send_file(output_video, as_attachment=True)
+
+    # Render the upload form
+    return '''
+        <form method="post" action="/" enctype="multipart/form-data">
+            <label for="input_files">Select image files:</label><br>
+            <input type="file" id="input_files" name="input_files" multiple><br><br>
+            <input type="submit" value="Submit">
+        </form>
+    '''
+
+
+
+
+@app.route('/slow_video', methods=['POST'])
+def slow_video():
+    video_path = 'SUPER_EFFECT_Output.mkv'
+    output_path = '/home/jack/Desktop/ProcessDirectory/uploads/SE.mp4'
+
+    # Load the video using MoviePy
+    video = VideoFileClip(video_path)
+
+    # Apply the desired filters using MoviePy
+    processed_video = video.fx('time_symmetrize').fx('speedx', 0.025)
+
+    # Write the processed video to the output path
+    processed_video.write_videofile(output_path, codec='libx264', fps=video.fps)
+
+    # Return the processed video file
+    return render_template('slow_video.html', video_url=output_path)
+
+
+if __name__ == "__main__":
+    port = int(os.environ.get('PORT', 5100))
+    app.run(debug=True, host='0.0.0.0', port=port)
+    ----------------------------
+
+
+    Absolutely, Jack! Here's how you can modify the Flask application to include date and time at the top of the entry in a readable form and create a large, expandable textarea for data entry. Additionally, I'll provide an example of how to display and copy the formatted code blocks in the search page.
+
+    
+
+You can use this template for the data entry page (enter_data.html):
+
+
+<!--enter_data.html Template:-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enter Code Snippets</title>
+</head>
+<body>
+    <h2>Data Entry</h2>
+    <p>{{ formatted_datetime }}</p>
+    <form method="POST">
+        <textarea name="code_block" rows="10" cols="60"></textarea><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
+
+    enter_data.py (Python code for data entry):
+
+# enter_data.py 
+from flask import Flask, render_template, request
+import datetime
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET', 'POST'])
+def enter_code():
+    if request.method == 'POST':
+        code_block = request.form['code_block']
+        formatted_datetime = datetime.datetime.now().strftime("%a_%d_%b_%Y %H:%M:%S")
+        with open('codeshints.txt', 'a') as file:
+            file.write(f"--Code Start:\n{formatted_datetime}\n{code_block}\n--Code End:\n\n")
+    return render_template('enter_data.html', formatted_datetime=formatted_datetime)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+    search_results.html Template:
+
+This template will display the search results page (search_results.html):
+
+<!-- search_results.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+    <h2>Search Results for "{{ keyword }}"</h2>
+    {% if code_blocks %}
+        {% for block in code_blocks %}
+            <pre>{{ block }}</pre>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>No matching results found.</p>
+    {% endif %}
+</body>
+</html>
+
+    search_data.py (Python code for searching and displaying results):
+
+python
+
+from flask import Flask, render_template, request
+import re
+
+app = Flask(__name__)
+
+#search_data.py
+def extract_code_blocks(file_path):
+    with open(file_path) as file:
+        content = file.read()
+    return content.split("--Code Start:")[1:]
+
+def format_datetime(datetime_str):
+    return datetime_str.replace("_", " ")
+
+@app.route('/', methods=['GET', 'POST'])
+def search_code():
+    if request.method == 'POST':
+        keyword = request.form['keyword']
+        code_blocks = extract_code_blocks('codeshints.txt')
+        filtered_blocks = [block for block in code_blocks if keyword in block]
+        formatted_datetime_blocks = [
+            {"datetime": format_datetime(re.search(r"\w+_\d+_\w+_\d+_\d+:\d+:\d+", block).group(0)),
+             "code_block": block}
+            for block in filtered_blocks
+        ]
+        return render_template('search_results.html', keyword=keyword, code_blocks=formatted_datetime_blocks)
+    return render_template('search_data.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+    search_data.html Template:
+
+This template will render the search page (search_data.html):
+
+
+<!-- search_data.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Code Snippets</title>
+</head>
+<body>
+    <h2>Search Code Snippets</h2>
+    <form method="POST">
+        <label for="keyword">Enter Keyword:</label>
+        <input type="text" name="keyword">
+        <input type="submit" value="Search">
+    </form>
+</body>
+</html>
+
+Remember to create these HTML templates in the same directory as your Python files. Also, ensure you have the required Flask libraries installed.

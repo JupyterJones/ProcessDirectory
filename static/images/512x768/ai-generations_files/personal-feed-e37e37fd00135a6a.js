@@ -1,0 +1,1 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[549],{44351:function(n,u,_){(window.__NEXT_P=window.__NEXT_P||[]).push(["/personal-feed",function(){return _(7487)}])},7487:function(n,u,_){"use strict";_.r(u);var e=_(85893),t=_(98411);u.default=()=>(0,e.jsx)(t.Z,{})}},function(n){n.O(0,[411,774,888,179],function(){return n(n.s=44351)}),_N_E=n.O()}]);

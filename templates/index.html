@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Files</title>
+</head>
+<body>
+    <form method="post" action="/process" enctype="multipart/form-data">
+        <label for="input_files">Select image files:</label><br>
+        <input type="file" id="input_files" name="input_files" accept=".jpg, .jpeg, .png" multiple><br><br>
+        <label for="fps">FPS (Frames per second):</label><br>
+        <input type="number" id="fps" name="fps" min="1" max="30" value="24"><br><br>
+        <input type="submit" value="Convert">
+    </form>
+
+    <!--link to mk_background-->
+    <a href="{{ url_for('mk_background') }}">Make Background - Create New static/images/ThumbNails_Background.png</a><br />
+
+    <a href="{{ url_for('mkvid') }}">Make Background From Existing static/images/ThumbNails_Background.png</a><br />
+
+    <a href="{{ url_for('mkmoz') }}">Make Mozaic from static/images/small</a><br />
+
+
+
+
+
+    <a href="{{ url_for('enter_code') }}">Enter A code Snippet</a><br /> 
+    
+    <a href="{{ url_for('search_code') }}">Search for a Snippet</a><br />
+    
+</body>
+</html>

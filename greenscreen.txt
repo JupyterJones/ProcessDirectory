@@ -1,0 +1,2 @@
+color=green:size=1280x720:rate=30:duration=10
+

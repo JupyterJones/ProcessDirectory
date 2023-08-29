@@ -1,0 +1,1 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[698],{56677:function(n,u,_){(window.__NEXT_P=window.__NEXT_P||[]).push(["/canvas",function(){return _(19495)}])},19495:function(n,u,_){"use strict";_.r(u);var t=_(85893),c=_(98411);u.default=()=>(0,t.jsx)(c.Z,{})}},function(n){n.O(0,[411,774,888,179],function(){return n(n.s=56677)}),_N_E=n.O()}]);

@@ -1,0 +1,22 @@
+<!--enter_data.html Template:-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enter Code Snippets</title>
+</head>
+<body>
+    <h2>Data Entry</h2>
+    <p>{{ formatted_datetime }}</p>
+    <form method="POST">
+        <textarea name="code_block" rows="10" cols="60"></textarea><br><br>
+        <input type="submit" value="Submit">
+    </form>
+
+ <!-- display  first_two_lines[0] and first_two_lines[1]-->
+    <p>First two lines of code:</p>
+    <pre>{{ first_two_lines[0] }}</pre>
+    <pre>{{ first_two_lines[1] }}</pre>
+    <pre>{{ first_two_lines[2] }}</pre>
+    <a href="{{ url_for('search_code') }}">Search Code Snippets</a> 
+</body>
+</html>

@@ -1,0 +1,38 @@
+# ffmpeg -f lavfi -i color=green:size=512x768:rate=30:duration=10 -c:v libx264 -tune stillimage -c:a aac -strict experimental -y greenscreenback.mp4
+# this exists:  static/images/frames_with_blue_outlines/frame_0001_outline.png
+import os
+
+# Directory containing blue outline images
+image_dir = 'static/images/frames_with_blue_outlines'
+
+# Greenscreen background video
+greenscreen_video = 'greenscreenback.mp4'
+
+# Output video name
+output_video = 'composite_video.mp4'
+
+import os
+import subprocess
+
+# ... (your other variables and paths)
+
+# Construct the FFmpeg command as a list of arguments
+ffmpeg_args = [
+    "ffmpeg", "-y", "-f", "image2", "-r", "30",
+    "-i", f"{image_dir}/frame_%04d_outline.png",
+    "-i", greenscreen_video,
+    "-filter_complex",
+    f"[0][1]scale2ref[out0][out1];[out0]format=argb[out0];[out0][out1]overlay",
+    "-c:v", "libx264", "-crf", "18", output_video
+]
+
+# Execute the FFmpeg command using subprocess
+try:
+    subprocess.run(ffmpeg_args, check=True)
+except subprocess.CalledProcessError as e:
+    print(f"An error occurred: {e}")
+else:
+    print("Video composition completed successfully!")
+
+
+
